@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Painter_DLL</name>
+    </assembly>
+    <members>
+        <member name="T:Painter_DLL.DrawType">
+            <summary>
+            標註工具類型
+            </summary>
+        </member>
+        <member name="T:Painter_DLL.enu_ImageFormat">
+            <summary>
+            影像格式 (System.Drawing.Imaging.ImageFormat)
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.cls_LabelImage.cls_DrawTypeInfo.drawType">
+            <summary>
+            標註工具類型
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.cls_LabelImage.cls_DrawTypeInfo.color">
+            <summary>
+            標註顏色
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Painter_DLL.cls_LabelImage.cls_DrawTypeInfo.halconColor" -->
+        <member name="P:Painter_DLL.cls_LabelImage.cls_DrawTypeInfo.Param">
+            <summary>
+            該標註工具物件
+            </summary>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.cls_DrawTypeInfo.cls_DrawTypeInfo_Constructor(Painter_DLL.DrawType,System.Drawing.Color,System.Single)">
+            <summary>
+            代替 建構子，初始化 之功能 
+            Note: 建構式有參數輸入時，會無法儲存到XML!
+            </summary>
+            <param name="drawType_"></param>
+            <param name="color_"></param>
+            <param name="w"></param>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.cls_DrawTypeInfo.ConvertParam">
+         
