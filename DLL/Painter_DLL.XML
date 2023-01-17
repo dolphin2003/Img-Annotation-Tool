@@ -190,4 +190,64 @@
             繪製標註
             </summary>
             <param name="g_"></param>
-            
+            <param name="BackImg"></param>
+            <param name="zoomRatio"></param>
+            <param name="b_BackImg_hasBeenZoomed">BackImg 是否已做 resize</param>
+            <param name="b_MouseDown">滑鼠是否被按下</param>
+            <param name="b_Alpha">是否調整顯示透明度</param>
+            <param name="Alpha">透明度數值</param>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.ChangeColor(Painter_DLL.DrawType,System.Drawing.Color,System.Drawing.Color,System.Boolean)">
+            <summary>
+            【標註顏色切換】
+            </summary>
+            <param name="drawType"></param>
+            <param name="OrigColor"></param>
+            <param name="NewColor"></param>
+            <param name="b_AllColors"></param>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.Clear(Painter_DLL.DrawType,System.Drawing.Color,System.Boolean)">
+            <summary>
+            【移除】
+            </summary>
+            <param name="drawType"></param>
+            <param name="color"></param>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.ClearAll">
+            <summary>
+            【清空】
+            </summary>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.Recovery">
+            <summary>
+            【復原】
+            </summary>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.Add_1_BreakPoint">
+            <summary>
+            加入一個斷點 (BreakPoint)
+            Note: 每完成一個步驟MouseUp時，都會在結尾處新增一個斷點
+            </summary>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.Save_1_Recipe(System.String)">
+            <summary>
+            儲存單張標註工單
+            </summary>
+            <param name="directory_"></param>
+            <param name="Recipe"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.Convert_ImageFormat(Painter_DLL.enu_ImageFormat)">
+            <summary>
+            enu_ImageFormat類型 轉換成 System.Drawing.Imaging.ImageFormat類型
+            </summary>
+            <param name="imageFormat">enu_ImageFormat類型</param>
+            <returns></returns>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.Save_1_DrawImage(System.Drawing.Bitmap,System.String,System.Drawing.Imaging.ImageFormat)">
+            <summary>
+            儲存單張標註影像
+            </summary>
+            <param name="image"></param>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.Save_1_DrawImage2(System.Draw
