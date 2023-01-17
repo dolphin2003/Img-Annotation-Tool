@@ -117,4 +117,77 @@
             <summary>
             橢圓高度一半
             </summary>
-        </mem
+        </member>
+        <member name="P:Painter_DLL.cls_LabelImage.cls_ellipse_fill.W">
+            <summary>
+            橢圓寬度一半
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.cls_LabelImage.cls_ellipse_fill.H">
+            <summary>
+            橢圓高度一半
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.cls_LabelImage.cls_selectRect.W_Pen">
+            <summary>
+            畫筆寬度
+            </summary>
+        </member>
+        <member name="F:Painter_DLL.cls_LabelImage.cls_selectRect.Pt_UpperLeft">
+            <summary>
+            矩形左上角座標
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.cls_LabelImage.cls_selectRect.W">
+            <summary>
+            矩形寬
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.cls_LabelImage.cls_selectRect.H">
+            <summary>
+            矩形高
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.cls_LabelImage.ImageName">
+            <summary>
+            影像名稱
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.cls_LabelImage.ImageFormat_Orig">
+            <summary>
+            原始影像格式
+            </summary>
+        </member>
+        <member name="F:Painter_DLL.cls_LabelImage.points">
+            <summary>
+            紀錄滑鼠軌跡的陣列
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.cls_LabelImage.drawTypeInfo">
+            <summary>
+            紀錄不同滑鼠軌跡段落之 標註工具類型、顏色及大小
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.cls_LabelImage.Labelled_HalconColor">
+            <summary>
+            已標注顏色
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.cls_LabelImage.b_saved">
+            <summary>
+            是否已儲存
+            </summary>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.cls_LabelImage_Constructor(System.String,Painter_DLL.enu_ImageFormat)">
+            <summary>
+            代替 建構子，初始化 之功能 
+            Note: 建構式有參數輸入時，會無法儲存到XML!
+            </summary>
+            <param name="imageName_"></param>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.Redraw_Label(System.Drawing.Graphics,System.Drawing.Bitmap,System.Single,System.Boolean,System.Boolean,System.Boolean,System.Int32)">
+            <summary>
+            繪製標註
+            </summary>
+            <param name="g_"></param>
+            
