@@ -250,4 +250,68 @@
             </summary>
             <param name="image"></param>
         </member>
-        <member name="M:Painter_DLL.cls_LabelImage.Save_1_DrawImage2(System.Draw
+        <member name="M:Painter_DLL.cls_LabelImage.Save_1_DrawImage2(System.Drawing.Bitmap,System.String,System.Drawing.Imaging.ImageFormat)">
+            <summary>
+            儲存單張標註影像2
+            Note: 背景1，標註0
+            </summary>
+            <param name="image"></param>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.Save_1_DrawImage3(System.Drawing.Bitmap,System.String,System.Drawing.Imaging.ImageFormat)">
+            <summary>
+            儲存單張標註影像3
+            Note: 背景0，標註為該分類顏色
+            </summary>
+            <param name="image"></param>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.UnSaved_ProceedAnyway">
+            <summary>
+            未存檔時，提示使用者是否繼續執行
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Painter_DLL.cls_LabelImage.Update_Labelled_HalconColor">
+            <summary>
+            更新 Labelled_HalconColor
+            </summary>
+        </member>
+        <member name="M:Painter_DLL.clsStaticTool.SaveXML(System.Object,System.String)">
+            <summary>
+            儲存 XML
+            </summary>
+            <param name="SrcProduct"></param>
+            <param name="PathFile"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Painter_DLL.clsStaticTool.LoadXML``1(System.String,``0@)">
+            <summary>
+            載入 XML
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="PathFile"></param>
+            <param name="Recipe"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Painter_DLL.clsStaticTool.DeepClone``1(``0)">
+            <summary>
+            物件複製 (深層)
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Painter_DLL.clsStaticTool.GetHalconColor(System.Drawing.Color)">
+            <summary>
+            Color 轉 Halcon Color
+            </summary>
+            <param name="ConvertColor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Painter_DLL.clsStaticTool.GetSystemColor(System.String)">
+            <summary>
+            Halcon Color 轉 Color
+            </summary>
+            <param name="str_Color_Halcon"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Painter_DLL.clsStaticTool.GetSystemColor_withName(Sys
