@@ -314,4 +314,75 @@
             <param name="str_Color_Halcon"></param>
             <returns></returns>
         </member>
-        <member name="M:Painter_DLL.clsStaticTool.GetSystemColor_withName(Sys
+        <member name="M:Painter_DLL.clsStaticTool.GetSystemColor_withName(System.String)">
+            <summary>
+            Halcon Color 轉 Color (如為已知的系統色彩，則會設定其Name)
+            </summary>
+            <param name="str_Color_Halcon"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Painter_DLL.clsStaticTool.Control_DispImg_Transparent(System.Windows.Forms.Control,System.Boolean)">
+            <summary>
+            控制項顯示影像之背景顏色設定為透明
+            </summary>
+            <param name="ctrl"></param>
+            <param name="B_BackgroundImage"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Painter_DLL.clsProgressbar.m_nStep">
+            <summary>
+            目前進度列的位置: 0~100 (20190604) Jeff Revised!
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.clsProgressbar.isProcessRunning">
+            <summary>
+            是否正在執行進度條動作
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.clsProgressbar.m_strShow">
+            <summary>
+            顯示文字
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.clsProgressbar.b_Update_strShow">
+            <summary>
+            是否更新顯示文字
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.clsProgressbar.strShow_loc">
+            <summary>
+            顯示文字位置
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.clsProgressbar.strShow_size">
+            <summary>
+            顯示文字 Label尺寸
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.clsProgressbar.b_Update_strShow_loc">
+            <summary>
+            是否更新顯示文字位置
+            </summary>
+        </member>
+        <member name="P:Painter_DLL.clsProgressbar.m_strCaption">
+            <summary>
+            標題文字
+            </summary>
+        </member>
+        <member name="M:Painter_DLL.clsProgressbar.ShowRunProgress">
+            <summary>
+            顯示完成進度百分比(%)
+            </summary>
+        </member>
+        <member name="M:Painter_DLL.clsProgressbar.ShowRunProgress_thenWait">
+            <summary>
+            先執行RunProgress，在執行WaitProgress
+            </summary>
+        </member>
+        <member name="M:Painter_DLL.clsProgressbar.SetShowText(System.String)">
+            <summary>
+            設定/更新 顯示文字
+            </summary>
+            <param name="strText"></param>
+        </member>
+        <member name="M:Painter_DLL.clsProgressbar.SetShowText_location(System.Drawing.Point,System.Object
