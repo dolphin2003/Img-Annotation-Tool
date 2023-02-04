@@ -385,4 +385,55 @@
             </summary>
             <param name="strText"></param>
         </member>
-        <member name="M:Painter_DLL.clsProgressbar.SetShowText_location(System.Drawing.Point,System.Object
+        <member name="M:Painter_DLL.clsProgressbar.SetShowText_location(System.Drawing.Point,System.Object)">
+            <summary>
+            設定顯示文字位置
+            </summary>
+        </member>
+        <member name="M:Painter_DLL.clsProgressbar.SetShowCaption(System.String)">
+            <summary>
+            設定標題文字
+            </summary>
+            <param name="strText"></param>
+        </member>
+        <member name="M:Painter_DLL.clsProgressbar.SetStep(System.Int32)">
+            <summary>
+            更新目前進度條的位置 (20190604) Jeff Revised!
+            </summary>
+            <param name="nStep"></param>
+        </member>
+        <member name="M:Painter_DLL.clsProgressbar.CloseProgress">
+            <summary>
+            結束進度條
+            </summary>
+        </member>
+        <member name="M:Painter_DLL.clsProgressbar.trans2WaitProgress">
+            <summary>
+            執行ShowRunProgress_thenWait()中，轉換到WaitProgress
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Painter_DLL.ProgressDialog.UpdateProgress(System.Int32)" -->
+        <member name="M:Painter_DLL.ProgressDialog.SetShowText_location(System.Drawing.Point,System.Object)">
+            <summary>
+            設定顯示文字位置
+            </summary>
+        </member>
+        <member name="F:Painter_DLL.ProgressDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Painter_DLL.ProgressDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Painter_DLL.ProgressDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+    </members>
+</doc>
