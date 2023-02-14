@@ -911,3 +911,1154 @@ namespace Painter2
         /// <param name="e"></param>
         private void button_NextImage_Click(object sender, EventArgs e)
         {
+            if (this.index_Image >= (path_Images.Count - 1))
+                return;
+
+            // 判斷是否已儲存
+            if (LabelImage.b_saved == false)
+            {
+                if (LabelImage.UnSaved_ProceedAnyway() == false)
+                    return;
+            }
+
+            this.listViewImages.SelectedIndexChanged -= new System.EventHandler(this.listViewImages_SelectedIndexChanged);
+
+            // 消除目前選取狀態
+            this.listViewImages.Items[this.index_Image].Selected = false;
+            this.index_Image++;
+            this.Load_1_Img(path_Images[this.index_Image]);
+
+            this.Select_index_Image();
+
+            this.listViewImages.SelectedIndexChanged += new System.EventHandler(this.listViewImages_SelectedIndexChanged);
+        }
+
+        /// <summary>
+        /// 更新 listViewImages
+        /// </summary>
+        public void Update_listViewImages()
+        {
+            imageList.Images.Clear();
+
+            this.listViewImages.BeginUpdate(); // 資料更新,UI暫時掛起,直到EndUpdate繪製控制元件,可以有效避免閃爍並大大提高載入速度
+            this.listViewImages.Items.Clear();
+
+            for (int i = 0; i < path_Images.Count; i++)
+            {
+                string path = path_Images[i];
+                // 顯示影像檔名
+                ListViewItem lvi = new ListViewItem(this.GetImageName_FromPath(path, true));
+                // 顯示影像
+                Bitmap img = new Bitmap(path);
+                //img.MakeTransparent();
+                imageList.Images.Add(img);
+                lvi.ImageIndex = i;
+                //lvi.Focused = true;
+
+                this.listViewImages.Items.Add(lvi);
+            }
+
+            //this.listViewImages.CheckBoxes = true;
+            this.listViewImages.EndUpdate(); // 結束資料處理,UI介面一次性繪製
+
+            if (this.listViewImages.Items.Count > 0)
+            {
+                //this.listViewImages.Items[0].Checked = true;
+                this.listViewImages.Items[0].Focused = true;
+                this.listViewImages.SelectedIndexChanged -= new System.EventHandler(this.listViewImages_SelectedIndexChanged);
+                this.listViewImages.Items[0].Selected = true;
+                this.listViewImages.Items[0].EnsureVisible();
+                this.listViewImages.SelectedIndexChanged += new System.EventHandler(this.listViewImages_SelectedIndexChanged);
+            }
+        }
+
+        private void listViewImages_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.listViewImages.SelectedIndices.Count <= 0)
+                return;
+
+            // 判斷是否已儲存
+            if (LabelImage.b_saved == false)
+            {
+                if (LabelImage.UnSaved_ProceedAnyway() == false)
+                {
+                    this.listViewImages.SelectedIndexChanged -= new System.EventHandler(this.listViewImages_SelectedIndexChanged);
+
+                    // 消除目前選取狀態
+                    this.listViewImages.Items[this.listViewImages.SelectedIndices[0]].Focused = false;
+                    this.listViewImages.Items[this.listViewImages.SelectedIndices[0]].Selected = false;
+
+                    // 復原影像選取狀態
+                    Select_index_Image();
+
+                    this.listViewImages.SelectedIndexChanged += new System.EventHandler(this.listViewImages_SelectedIndexChanged);
+
+                    return;
+                }
+            }
+
+            //this.listViewImages.Items[index_Image].Selected = false;
+            index_Image = this.listViewImages.SelectedIndices[0];
+            Load_1_Img(path_Images[index_Image]);
+
+            //Select_index_Image();
+        }
+
+        /// <summary>
+        /// 顯示影像切換
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rbtn = sender as RadioButton;
+            if (rbtn.Checked == false) return;
+
+            Switch_button_dispImg();
+
+            pictureBox_ImageShowForm.Invalidate();
+        }
+
+        /// <summary>
+        /// 切換 button_dispImg 顯示之文字及影像
+        /// </summary>
+        private void Switch_button_dispImg()
+        {
+            if (radioButton_OrigImg.Checked) // 【原圖】
+            {
+                //if (Language == "Chinese")
+                //    button_dispImg.Text = "原圖";
+                //else
+                //    button_dispImg.Text = "OrigImg";
+                button_dispImg.Text = radioButton_OrigImg.Text;
+
+                this.button_dispImg.Image = global::Painter2.Properties.Resources.原圖_24;
+            }
+            else //【標註影像】
+            {
+                //button_dispImg.Text = "標註影像";
+                button_dispImg.Text = radioButton_DrawImg.Text;
+
+                this.button_dispImg.Image = global::Painter2.Properties.Resources.標註影像_24;
+            }
+        }
+
+        /// <summary>
+        /// 顯示【原圖】/【標註影像】切換
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_dispImg_Click(object sender, EventArgs e)
+        {
+            if (radioButton_OrigImg.Checked)
+                radioButton_DrawImg.Checked = true;
+            else
+                radioButton_OrigImg.Checked = true;
+        }
+
+        /// <summary>
+        /// 【調整顯示透明度】啟用切換
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkBox_Alpha_CheckedChanged(object sender, EventArgs e)
+        {
+            this.nud_Alpha.Enabled = this.checkBox_Alpha.Checked;
+            if (this.checkBox_Alpha.Checked == false)
+            {
+                this.nud_Alpha.ValueChanged -= new System.EventHandler(this.nud_Alpha_ValueChanged);
+                this.nud_Alpha.Value = 255;
+                this.nud_Alpha.ValueChanged += new System.EventHandler(this.nud_Alpha_ValueChanged);
+            }
+            pictureBox_ImageShowForm.Invalidate();
+        }
+
+        /// <summary>
+        /// 【調整顯示透明度】數值更新
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void nud_Alpha_ValueChanged(object sender, EventArgs e)
+        {
+            pictureBox_ImageShowForm.Invalidate();
+        }
+
+        /// <summary>
+        /// 【游標類型】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbx_Cursor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateCursor(pictureBox_ImageShowForm);
+            //this.Cursor = Cursors.Default;
+        }
+
+        /// <summary>
+        /// 標註工具類型切換
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void radioButton_Tool_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rbtn = sender as RadioButton;
+            if (rbtn.Checked == false) return;
+
+            string tag = rbtn.Tag.ToString();
+            this.drawType = (DrawType)(Enum.Parse(typeof(DrawType), tag));
+        }
+
+        private void pictureBox_ImageShowForm_Paint(object sender, PaintEventArgs e)
+        {
+            /*
+            if (b_MouseEvent != true)
+                g.Clear(System.Drawing.SystemColors.Control);
+            */
+            //this.pictureBox_ImageShowForm.Paint -= new System.Windows.Forms.PaintEventHandler(this.pictureBox_ImageShowForm_Paint);
+            //pictureBox_ImageShowForm.Image = LoadImage_bmp;
+            //this.pictureBox_ImageShowForm.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_ImageShowForm_Paint);
+
+            g = e.Graphics;
+            if (radioButton_DrawImg.Checked) // 標註影像
+            {
+                //Redraw_Label(g, (float)(ZoomRatios[int.Parse(trackBar_zoom.Value.ToString())] / 100));
+                this.LabelImage.Redraw_Label(g, this.LoadImage_bmp, (float)(ZoomRatios[int.Parse(trackBar_zoom.Value.ToString())] / 100), false, this.isMouseDown, this.checkBox_Alpha.Checked, int.Parse(this.nud_Alpha.Value.ToString()));
+            }
+            g = pictureBox_ImageShowForm.CreateGraphics(); // 取得繪圖區物件
+        }
+
+        private void Redraw_Label(Graphics g_, float zoomRatio = 1)
+        {
+            //g_.Clear(System.Drawing.SystemColors.Control); // 清除標註
+
+            /*
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                if (points[i].X >= 0 && points[i + 1].X >= 0)
+                    g_.DrawLine(ListPen[i + 1], points[i], points[i + 1]);
+            }
+            */
+            /*
+            for (int i = 0; i < points.Count; i++)
+            {
+                if (points[i].X >= 0)
+                {
+                    //g_.DrawRectangle(ListPen[i], new Rectangle(points[i], new Size(1, 1)));
+
+                    float w = ListPen[i].Width;
+                    // 影像座標上的寬 轉為 繪圖區的寬
+                    w *= zoomRatio;
+                    Pen p = new Pen(ListPen[i].Color, w);
+                    //g_.DrawRectangle(p, points[i].X * zoomRatio - w / 2, points[i].Y * zoomRatio - w / 2, w, w);
+                    g_.FillRectangle(new SolidBrush(ListPen[i].Color), points[i].X * zoomRatio - w / 2, points[i].Y * zoomRatio - w / 2, w, w);
+                }
+            }
+            */
+        }
+
+        /// <summary>
+        /// 更新滑桿數值顯示標籤及其位置 (滑桿數值改變)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void trackBar_width_Scroll(object sender, EventArgs e)
+        {
+            // 更新滑桿數值顯示
+            label_widthValue.Text = trackBar_width.Value.ToString();
+
+            // 更新顯示標籤位置
+            int Min = label_width_Min.Top, Max = label_width_Max.Top;
+            int value = trackBar_width.Value;
+            label_widthValue.Top = (int)(Min + (Max - Min) / ((double)(trackBar_width.Maximum - trackBar_width.Minimum)) * (value - trackBar_width.Minimum) + 0.5);
+
+            // 更新滑鼠游標
+            UpdateCursor(pictureBox_ImageShowForm);
+        }
+
+        /// <summary>
+        /// 【標註顏色】or【轉換顏色】 顏色設定
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_SetColor_Click(object sender, EventArgs e)
+        {
+            Button bt = sender as Button;
+            colorDialog_SetColor.Color = bt.BackColor;
+            if (colorDialog_SetColor.ShowDialog() != DialogResult.Cancel)
+            {
+                bt.BackColor = colorDialog_SetColor.Color;
+
+                /*
+                // 測試顏色轉換後是否相等
+                string halconColor = clsStaticTool.GetHalconColor(this.button_SetColor.BackColor);
+                Color c = clsStaticTool.GetSystemColor(halconColor);
+                int Argb;
+                if (c == this.button_SetColor.BackColor)
+                    ;
+                else if (c.ToArgb() == this.button_SetColor.BackColor.ToArgb())
+                    Argb = c.ToArgb();
+                */
+            }
+        }
+
+        /// <summary>
+        /// 【標註顏色】顏色改變時，更新滑鼠游標
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_SetColor_BackColorChanged(object sender, EventArgs e)
+        {
+            // 更新滑鼠游標
+            this.UpdateCursor(this.pictureBox_ImageShowForm);
+        }
+
+        /// <summary>
+        /// 更新 【已標注顏色】下拉式選單
+        /// </summary>
+        private void Update_cbx_LabelledColor()
+        {
+            this.cbx_LabelledColor.Items.Clear();
+            this.cbx_LabelledColor.Text = "";
+            foreach (string s in this.LabelImage.Labelled_HalconColor)
+                this.cbx_LabelledColor.Items.Add(s);
+        }
+
+        /// <summary>
+        /// 選取【已標注顏色】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbx_LabelledColor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.cbx_LabelledColor.SelectedIndex < 0)
+                return;
+
+            this.button_SetColor.BackColor = clsStaticTool.GetSystemColor(this.LabelImage.Labelled_HalconColor[this.cbx_LabelledColor.SelectedIndex]);
+
+            // 更新滑鼠游標
+            this.UpdateCursor(pictureBox_ImageShowForm);
+        }
+
+        /// <summary>
+        /// 【標註顏色轉換】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_ChangeColor_Click(object sender, EventArgs e)
+        {
+            Color OrigColor = this.button_SetColor.BackColor;
+
+            // 標註顏色切換
+            /*
+            foreach (Pen p in ListPen)
+            {
+                if (checkBox_ChangeColor_All.Checked || p.Color == OrigColor)
+                    p.Color = button_SetColor.BackColor;
+            }
+            */
+            this.LabelImage.ChangeColor(drawType, OrigColor, this.button_Color_changed.BackColor, this.checkBox_ChangeColor_All.Checked);
+            try // (20210816) Jeff Revised!
+            {
+                this.List_Batch_ChangeColor[this.index_Image].B_Color_Changed = true;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString());
+            }
+
+            pictureBox_ImageShowForm.Invalidate();
+            this.Update_cbx_LabelledColor();
+        }
+
+        /// <summary>
+        /// 【移除】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_Clear_Click(object sender, EventArgs e)
+        {
+            /* 法1 */
+            /*
+            if (ListPen.Exists(x => x.Color == button_SetColor.BackColor))
+            {
+                while (true)
+                {
+                    int index = ListPen.FindIndex(x => x.Color == button_SetColor.BackColor);
+                    if (index == -1)
+                        break;
+                    ListPen.RemoveAt(index);
+                    points.RemoveAt(index);
+                }
+            }
+            */
+            LabelImage.Clear(drawType, button_SetColor.BackColor, checkBox_ChangeColor_All.Checked);
+
+            pictureBox_ImageShowForm.Invalidate();
+            this.Update_cbx_LabelledColor();
+        }
+
+        /// <summary>
+        /// 【清空】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_ClearAll_Click(object sender, EventArgs e)
+        {
+            //points.Clear();
+            //ListPen.Clear();
+            LabelImage.ClearAll();
+
+            pictureBox_ImageShowForm.Invalidate();
+            this.Update_cbx_LabelledColor();
+        }
+
+        /// <summary>
+        /// 【復原】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_Recovery_Click(object sender, EventArgs e)
+        {
+            LabelImage.Recovery();
+
+            pictureBox_ImageShowForm.Invalidate();
+            this.Update_cbx_LabelledColor();
+        }
+
+        /// <summary>
+        /// 【重做】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_Redo_Click(object sender, EventArgs e)
+        {
+            this.Update_cbx_LabelledColor();
+        }
+
+        /// <summary>
+        /// 【儲存路徑】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_SavePath_Click(object sender, EventArgs e)
+        {
+            #if Use_FolderBrowserDialog_NewType
+                FolderBrowserDialog_New Dilg = new FolderBrowserDialog_New();
+                Dilg.DirectoryPath = this.saveSetting.Folder_Save; // 初始路徑
+                if (Dilg.ShowDialog(this) != DialogResult.OK)
+                    return;
+                this.saveSetting.Folder_Save = Dilg.DirectoryPath;
+            #else
+                FolderBrowserDialog Dilg = new FolderBrowserDialog();
+                Dilg.SelectedPath = this.saveSetting.Folder_Save; // 初始路徑
+                if (Dilg.ShowDialog() != DialogResult.OK)
+                    return;
+                this.saveSetting.Folder_Save = Dilg.SelectedPath;
+            #endif
+
+            if (string.IsNullOrEmpty(saveSetting.Folder_Save))
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show("路徑無效!", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                saveSetting.Folder_Save = Application.StartupPath;
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 【儲存】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_Save_Click(object sender, EventArgs e)
+        {
+            //pictureBox_ImageShowForm.Image.Save("SavedImg.bmp");
+            /*
+            Bitmap bmp = new Bitmap(LoadImage_bmp.Width, LoadImage_bmp.Height);
+            Graphics g_save = Graphics.FromImage(bmp);
+            //g_save.DrawImage(LoadImage_bmp, new Point(0, 0));
+            g_save.DrawImage(LoadImage_bmp, 0, 0, LoadImage_bmp.Width, LoadImage_bmp.Height);
+            Redraw_Label(g_save);
+            bmp.Save("SavedImg.bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+            */
+            /*
+            string path = Application.StartupPath;
+            path += "/SavedImg.bmp";
+            LabelImage.Save_1_DrawImage(LoadImage_bmp, path);
+            */
+
+            //this.LabelImage.Save(this.LoadImage_bmp, this.saveSetting);
+            Save(this.LabelImage, this.LoadImage_bmp, this.saveSetting); // (20201019) Jeff Revised!
+            this.List_Batch_ChangeColor[this.index_Image].B_Saved = true;
+        }
+
+        /// <summary>
+        /// 【儲存】
+        /// </summary>
+        /// <param name="labelImage"></param>
+        /// <param name="image"></param>
+        /// <param name="saveSetting"></param>
+        /// <returns></returns>
+        public static bool Save(cls_LabelImage labelImage, Bitmap image, cls_SaveSetting saveSetting) // (20201019) Jeff Revised!
+        {
+            bool b_status_ = false;
+            labelImage.b_saved = true;
+            try
+            {
+                if (saveSetting.B_save_label)
+                    labelImage.Save_1_Recipe(saveSetting.Folder_Save + "\\" + saveSetting.FileName_label + "\\");
+
+                enu_ImageFormat enuImageFormat = saveSetting.ImageFormat_Save;
+                if (saveSetting.B_Save_SameImageFormat)
+                    enuImageFormat = labelImage.ImageFormat_Orig;
+                System.Drawing.Imaging.ImageFormat imageFormat = labelImage.Convert_ImageFormat(enuImageFormat);
+                string ext = enuImageFormat.ToString();
+
+                if (saveSetting.B_save_OrigImage)
+                {
+                    if (saveSetting.B_External_Open)
+                    {
+                        //labelImage.Save_OrigImage(image, saveSetting.Extra_dirX + "\\" + labelImage.ImageName + "." + ext, imageFormat);
+                    }
+                    labelImage.Save_OrigImage(image, saveSetting.Folder_Save + "\\" + saveSetting.FileName_OrigImage + "\\" + labelImage.ImageName + "." + ext, imageFormat);
+                }
+                if (saveSetting.B_save_label_Image1)
+                {
+                    if (saveSetting.B_External_Open)
+                        labelImage.Save_1_DrawImage(image, saveSetting.Extra_dirY + "\\" + labelImage.ImageName + "." + ext, imageFormat);
+                    labelImage.Save_1_DrawImage(image, saveSetting.Folder_Save + "\\" + saveSetting.FileName_label_Image1 + "\\" + labelImage.ImageName + "." + ext, imageFormat);
+                }
+                if (saveSetting.B_save_label_Image2)
+                    labelImage.Save_1_DrawImage2(image, saveSetting.Folder_Save + "\\" + saveSetting.FileName_label_Image2 + "\\" + labelImage.ImageName + "." + ext, imageFormat);
+                if (saveSetting.B_save_label_Image3)
+                    labelImage.Save_1_DrawImage3(image, saveSetting.Folder_Save + "\\" + saveSetting.FileName_label_Image3 + "\\" + labelImage.ImageName + "." + ext, imageFormat);
+
+                b_status_ = true;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString());
+            }
+
+            labelImage.b_saved = b_status_;
+            return b_status_;
+        }
+
+        #region Cursor
+
+        /// <summary>
+        /// 滑鼠游標類型
+        /// </summary>
+        public enum enu_CursorImage
+        {
+            #region Windows Forms 內建游標類型
+
+            Cross,
+            Arrow,
+            Default,
+            SizeAll,
+            Hand,
+
+            #endregion
+
+            Circle,
+            Rectangle,
+            Cross2,
+            CrossCircle,
+            CrossRectangle,
+            DiamondCircle,
+        };
+
+        public static Bitmap CreateCursorImage(Size ImageSize, enu_CursorImage type, float DrawWidth = 5, Color color = default(Color))
+        {
+            int w = ImageSize.Width, h = ImageSize.Height;
+            Bitmap bmp = new Bitmap(w, h);
+            float x = (float)(ImageSize.Width / 2.0), y = (float)(ImageSize.Height / 2.0);
+            Graphics g = Graphics.FromImage(bmp); // 將Graphics g畫布 畫在bmp上
+
+            if (object.Equals(color, default(Color)))
+                color = Color.Black;
+            Brush bb = new SolidBrush(color);
+
+            // 輪廓
+            Pen p;
+            if (color != Color.Black)
+                p = new Pen(Color.Black, 1);
+            else
+                p = new Pen(Color.White, 1);
+
+            switch (type)
+            {
+                case enu_CursorImage.Circle:
+                    {
+                        g.FillEllipse(bb, x - DrawWidth / 2, y - DrawWidth / 2, DrawWidth, DrawWidth);
+                        g.DrawEllipse(p, x - DrawWidth / 2, y - DrawWidth / 2, DrawWidth, DrawWidth); // 輪廓
+                    }
+                    break;
+                case enu_CursorImage.Rectangle:
+                    {
+                        g.FillRectangle(bb, x - DrawWidth / 2, y - DrawWidth / 2, DrawWidth, DrawWidth);
+                        g.DrawRectangle(p, x - DrawWidth / 2, y - DrawWidth / 2, DrawWidth, DrawWidth); // 輪廓
+                    }
+                    break;
+                case enu_CursorImage.Cross2:
+                    {
+                        // 輪廓
+                        p.Width = 2;
+                        g.DrawLine(p, x, y - DrawWidth / 2, x, y + DrawWidth / 2 - 1);
+                        g.DrawLine(p, x - DrawWidth / 2, y, x + DrawWidth / 2 - 1, y);
+
+                        p = new Pen(color, 1);
+                        g.DrawLine(p, x, y - DrawWidth / 2, x, y + DrawWidth / 2 - 1);
+                        g.DrawLine(p, x - DrawWidth / 2, y, x + DrawWidth / 2 - 1, y);
+                    }
+                    break;
+                case enu_CursorImage.CrossCircle:
+                    {
+                        // Circle
+                        g.FillEllipse(bb, x - DrawWidth / 2, y - DrawWidth / 2, DrawWidth, DrawWidth);
+                        g.DrawEllipse(p, x - DrawWidth / 2, y - DrawWidth / 2, DrawWidth, DrawWidth); // 輪廓
+
+                        // Cross
+                        float len = (y - DrawWidth / 2) * 3 / 5;
+                        g.DrawLine(p, x, 0, x, len);
+                        g.DrawLine(p, x, h - 1, x, h - len);
+                        g.DrawLine(p, 0, y, len, y);
+                        g.DrawLine(p, w - 1, y, w - len, y);
+                    }
+                    break;
+                case enu_CursorImage.CrossRectangle:
+                    {
+                        // Rectangle
+                        g.FillRectangle(bb, x - DrawWidth / 2, y - DrawWidth / 2, DrawWidth, DrawWidth);
+                        g.DrawRectangle(p, x - DrawWidth / 2, y - DrawWidth / 2, DrawWidth, DrawWidth); // 輪廓
+
+                        // Cross
+                        float len = (y - DrawWidth / 2) * 3 / 5;
+                        g.DrawLine(p, x, 0, x, len);
+                        g.DrawLine(p, x, h - 1, x, h - len);
+                        g.DrawLine(p, 0, y, len, y);
+                        g.DrawLine(p, w - 1, y, w - len, y);
+                    }
+                    break;
+                case enu_CursorImage.DiamondCircle:
+                    {
+                        // Circle
+                        g.FillEllipse(bb, x - DrawWidth / 2, y - DrawWidth / 2, DrawWidth, DrawWidth);
+                        g.DrawEllipse(p, x - DrawWidth / 2, y - DrawWidth / 2, DrawWidth, DrawWidth); // 輪廓
+
+                        // Diamond
+                        g.DrawLine(p, x, 0, w - 1, y);
+                        g.DrawLine(p, w - 1, y, x, h - 1);
+                        g.DrawLine(p, x, h - 1, 0, y);
+                        g.DrawLine(p, 0, y, x, 0);
+                    }
+                    break;
+            }
+
+            return bmp;
+        }
+
+        public static Cursor CreateCursor(Bitmap bm, object size = null, object transparentColor = null)
+        {
+            if (size == null)
+            {
+                //bm = new Bitmap(bm);
+            }
+            else
+                bm = new Bitmap(bm, (Size)size);
+
+            if (transparentColor == null)
+                bm.MakeTransparent();
+            else
+                bm.MakeTransparent((Color)transparentColor);
+
+            return new Cursor(bm.GetHicon());
+        }
+
+        /// <summary>
+        /// 更新滑鼠游標
+        /// </summary>
+        public void UpdateCursor(Control ctrl_Cursor = null)
+        {
+            if (ctrl_Cursor == null)
+                ctrl_Cursor = this;
+
+            // 判斷是否為Windows Forms 內建游標類型
+            Type t = typeof(Cursors);
+            MemberInfo[] mis = t.GetMembers();
+            List<string> ListStr = new List<string>();
+            foreach (var m in mis)
+                ListStr.Add(m.Name);
+            enu_CursorImage type = (enu_CursorImage)cbx_Cursor.SelectedIndex;
+            if (ListStr.Contains(type.ToString())) // Windows Forms 內建游標類型
+            {
+                switch (type)
+                {
+                    case enu_CursorImage.Cross:
+                        ctrl_Cursor.Cursor = Cursors.Cross;
+                        break;
+                    case enu_CursorImage.Arrow:
+                        ctrl_Cursor.Cursor = Cursors.Arrow;
+                        break;
+                    case enu_CursorImage.Default:
+                        ctrl_Cursor.Cursor = Cursors.Default;
+                        break;
+                    case enu_CursorImage.SizeAll:
+                        ctrl_Cursor.Cursor = Cursors.SizeAll;
+                        break;
+                    case enu_CursorImage.Hand:
+                        ctrl_Cursor.Cursor = Cursors.Hand;
+                        break;
+                }
+            }
+            else // 自定義游標類型
+            {
+                float w = 2 * trackBar_width.Value;
+                Bitmap bm = CreateCursorImage(new Size((int)(5 * w), (int)(5 * w)), type, w, button_SetColor.BackColor);
+                //ctrl_Cursor.Cursor.Dispose();
+                ctrl_Cursor.Cursor = CreateCursor(bm);
+                //bm.Dispose();
+            }
+        }
+
+        #endregion
+
+        #region  縮放影像
+
+        private double[] ZoomRatios = new double[] { 12.5, 25, 50, 100, 200, 300, 400, 500, 600, 700, 800 };
+
+        private void trackBar_zoom_ValueChanged(object sender, EventArgs e)
+        {
+            // 更新顯示數值
+            int index = int.Parse(trackBar_zoom.Value.ToString());
+            label_zoom.Text = (ZoomRatios[index].ToString() + "%").PadLeft(5);
+
+            // 縮放影像
+            this.pictureBox_ImageShowForm.Width = (int)(Initial_pictureBox1Width * ZoomRatios[index] / 100);
+            this.pictureBox_ImageShowForm.Height = (int)(Initial_pictureBox1Height * ZoomRatios[index] / 100);
+
+            this.pictureBox_Dir2.Width = this.pictureBox_ImageShowForm.Width;
+            this.pictureBox_Dir2.Height = this.pictureBox_ImageShowForm.Height;
+        }
+
+        /// <summary>
+        /// 縮小
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_zoomOut_Click(object sender, EventArgs e)
+        {
+            if (trackBar_zoom.Value > trackBar_zoom.Minimum)
+                trackBar_zoom.Value -= 1;
+        }
+
+        /// <summary>
+        /// 放大
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_zoomIn_Click(object sender, EventArgs e)
+        {
+            if (trackBar_zoom.Value < trackBar_zoom.Maximum)
+                trackBar_zoom.Value += 1;
+        }
+
+        #endregion
+
+        #region menuStrip 事件
+
+        /// <summary>
+        /// 結束(✖)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 結束ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // 判斷是否已儲存
+            //if (LabelImage.b_saved == false)
+            //{
+            //    if (LabelImage.UnSaved_ProceedAnyway() == false)
+            //        return;
+            //}
+
+            DialogResult dialogResult = MessageBox.Show("確認是否關閉程式?", "此動作會關閉程式,請確認是否執行?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult != DialogResult.Yes)
+                return;
+            this.Close();
+        }
+
+        /// <summary>
+        /// 儲存設定
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 儲存設定ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveSetting_Form f = new SaveSetting_Form())
+            {
+                f.Set_saveSetting(this.saveSetting);
+                f.Location = new Point(0, 0);
+                if (f.ShowDialog() == DialogResult.Yes) //【儲存】
+                {
+                    this.Update_Module(this.saveSetting.Index_Module);
+
+                    this.groupBox_ColorList.Visible = this.saveSetting.B_ColorList;
+                    this.Update_Dynamic_radioButton();
+
+                    // 判斷是否已儲存
+                    if (LabelImage.b_saved == false)
+                    {
+                        if (LabelImage.UnSaved_ProceedAnyway() == false)
+                            return;
+                    }
+
+                    // 更新此影像標註檔
+                    if (path_Images.Count > 0)
+                        this.Load_1_Img(path_Images[index_Image]);
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// 當前影像之標註檔是否存在
+        /// </summary>
+        private bool B_LabelXML_Exist { get; set; } = false;
+
+        private List<cls_Batch_ChangeColor> List_Batch_ChangeColor { get; set; } = new List<cls_Batch_ChangeColor>();
+
+        private clsProgressbar m_ProgressBar { get; set; } = new clsProgressbar();
+
+        private Thread backgroundThread { get; set; }
+
+        /// <summary>
+        /// 【標註顏色批次轉換】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 標註顏色批次轉換ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("確認是否執行【標註顏色批次轉換】? \n警告: 一旦執行即無法復原", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dr != DialogResult.Yes)
+                return;
+
+            if (this.folder_LoadBatch == "")
+            {
+                MessageBox.Show("請先執行【批次載入】", "溫馨提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            else if (Directory.Exists(this.folder_LoadBatch) == false)
+            {
+                MessageBox.Show("【批次載入】路徑不存在", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            
+            try
+            {
+                // Initialize the thread that will handle the background process
+                //Thread backgroundThread = new Thread(
+                this.backgroundThread = new Thread(
+                    new ThreadStart(() =>
+                    {
+                        try
+                        {
+                            this.m_ProgressBar = new clsProgressbar();
+
+                            this.m_ProgressBar.FormClosedEvent2 += new clsProgressbar.FormClosedHandler2(this.SetFormClosed2_Batch_ChangeColor);
+
+                            this.m_ProgressBar.SetShowText("請等待【標註顏色批次轉換】......");
+                            this.m_ProgressBar.SetShowCaption("執行中......");
+                            this.m_ProgressBar.SetShowText_location(new Point(11, 1), new Size(387, 48));
+                            this.m_ProgressBar.ShowRunProgress();
+
+                            #region 執行【標註顏色批次轉換】
+
+                            this.button_LoadBatchImages_Click(null, null);
+                            if (this.path_Images.Count > 0)
+                            {
+                                while (true)
+                                {
+                                    int Method = 2;
+                                    if (Method == 1) // Method 1: 會有問題!
+                                    {
+                                        #region Method 1
+
+                                        // 對此影像做【標註顏色轉換】並且【儲存】
+                                        if (this.B_LabelXML_Exist)
+                                        {
+                                            // 【標註顏色轉換】
+                                            if (this.InvokeRequired)
+                                                this.BeginInvoke(new Action(() => this.button_ChangeColor_Click(null, null)));
+                                            else
+                                                this.button_ChangeColor_Click(null, null);
+                                            // 【儲存】
+                                            if (this.InvokeRequired)
+                                                this.BeginInvoke(new Action(() => this.button_Save_Click(null, null)));
+                                            else
+                                                this.button_Save_Click(null, null);
+
+                                            /*
+                                            if (this.InvokeRequired)
+                                            {
+                                                this.BeginInvoke(new Action(() => this.button_ChangeColor_Click(null, null)));
+                                                this.BeginInvoke(new Action(() => this.button_Save_Click(null, null)));
+                                            }
+                                            else
+                                            {
+                                                this.button_ChangeColor_Click(null, null);
+                                                this.button_Save_Click(null, null);
+                                            }
+                                            */
+                                        }
+                                        else
+                                        {
+                                            ;
+                                        }
+
+                                        Thread.Sleep(500); // For debug!
+
+                                        // UI才會更新
+                                        Application.DoEvents(); // 處理當前在消息隊列中的所有 Windows 消息，可以防止界面停止響應
+                                        Thread.Sleep(1); // Sleep一下，避免一直跑DoEvents()導致計算效率低
+
+                                        if (this.index_Image == (this.path_Images.Count - 1)) // 此影像為最後一張
+                                            break;
+
+                                        // 【下一張】
+                                        if (this.InvokeRequired)
+                                            this.BeginInvoke(new Action(() => this.button_NextImage_Click(null, null)));
+                                        else
+                                            this.button_NextImage_Click(null, null);
+
+                                        #endregion
+                                    }
+                                    else // Method 2
+                                    {
+                                        #region Method 2
+
+                                        if (this.List_Batch_ChangeColor[this.index_Image].B_LabelXML_Exist)
+                                        {
+                                            // 【標註顏色轉換】
+                                            if (this.List_Batch_ChangeColor[this.index_Image].B_Color_Changed == false)
+                                            {
+                                                if (this.InvokeRequired)
+                                                    this.BeginInvoke(new Action(() => this.button_ChangeColor_Click(null, null)));
+                                                else
+                                                    this.button_ChangeColor_Click(null, null);
+                                            }
+
+                                            // 【儲存】
+                                            if (this.List_Batch_ChangeColor[this.index_Image].B_Color_Changed && this.List_Batch_ChangeColor[this.index_Image].B_Saved == false)
+                                            {
+                                                if (this.InvokeRequired)
+                                                    this.BeginInvoke(new Action(() => this.button_Save_Click(null, null)));
+                                                else
+                                                    this.button_Save_Click(null, null);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            ;
+                                        }
+
+                                        //Thread.Sleep(500); // For debug!
+                                        Thread.Sleep(100); // 太小會有問題!!!
+
+                                        // UI才會更新
+                                        //Application.DoEvents(); // 處理當前在消息隊列中的所有 Windows 消息，可以防止界面停止響應
+                                        Thread.Sleep(1); // Sleep一下，避免一直跑DoEvents()導致計算效率低
+
+                                        if (this.List_Batch_ChangeColor[this.index_Image].B_Finished()) // 此影像已完成【標註顏色轉換】 或 標註檔不存在無需做轉換
+                                        {
+                                            this.m_ProgressBar.SetStep(100 * (this.index_Image + 1) / (this.path_Images.Count));
+                                            if (this.index_Image == (this.path_Images.Count - 1)) // 此影像為最後一張
+                                            {
+                                                Thread.Sleep(100); // 顯示100% For debug!
+                                                break;
+                                            }
+                                            else // 執行【下一張】
+                                            {
+                                                if (this.InvokeRequired)
+                                                    this.BeginInvoke(new Action(() => this.button_NextImage_Click(null, null)));
+                                                else
+                                                    this.button_NextImage_Click(null, null);
+                                            }
+                                        }
+
+                                        #endregion
+                                    }
+                                }
+                            }
+
+                            #endregion
+
+                            this.m_ProgressBar.CloseProgress();
+                        }
+                        catch (ThreadInterruptedException ex)
+                        {
+                            //this.backgroundThread = null;
+                        }
+                        catch (ThreadAbortException ex)
+                        {
+                            Thread.ResetAbort();
+                        }
+                    }
+                ));
+
+                // Start the background process thread
+                backgroundThread.Start();
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 【標註顏色批次轉換】停止
+        /// </summary>
+        public void SetFormClosed2_Batch_ChangeColor()
+        {
+            // 關閉程式時仍有問題!!!
+            this.backgroundThread.Abort();
+            //this.backgroundThread.Interrupt();
+            //this.backgroundThread.Join();
+        }
+
+        #region 語言切換
+
+        /// <summary>
+        /// 轉換語言 (任何語言轉中文)
+        /// </summary>
+        private void ResetLanguage()
+        {
+            clsLanguage.clsLanguage.UpdateRestoreLanguageLib();
+
+            clsLanguage.clsLanguage.SetLanguateToControls(this, true);
+
+            clsLanguage.clsLanguage.RefreshLib();
+        }
+
+        /// <summary>
+        /// 轉換語言 (任何語言轉其他語言)
+        /// </summary>
+        private void ChangeLanguage()
+        {
+            clsLanguage.clsLanguage.UpdateLanguageLib();
+
+            clsLanguage.clsLanguage.SetLanguateToControls(this, true);
+
+            clsLanguage.clsLanguage.RefreshLib();
+        }
+
+        private void 中文ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            中文ToolStripMenuItem.Checked = true;
+            英文ToolStripMenuItem.Checked = false;
+            Language = "Chinese";
+
+            /* 特殊字元先刪除 (因為無法存入INI檔) */
+            if (結束ToolStripMenuItem.Text == "結束(✖)")
+                結束ToolStripMenuItem.Text = 結束ToolStripMenuItem.Text.Substring(0, 2);
+            else if (結束ToolStripMenuItem.Text == "Quit(✖)")
+                結束ToolStripMenuItem.Text = 結束ToolStripMenuItem.Text.Substring(0, 4);
+
+            clsIniFile iniSystem = new clsIniFile(clsData.g_strSystemIniFilePath); // clsData.g_strSystemIniFilePath = Application.StartupPath + "\\INI\\System.ini"
+            ResetLanguage();
+            iniSystem.WriteValue("System", "Language", "Chinese"); // 儲存目前使用之語言種類
+
+            /* 特殊字元補回 (因為無法存入INI檔) */
+            結束ToolStripMenuItem.Text += "(✖)";
+
+            if (path_Images.Count > 0)
+                Update_ImgInfo(path_Images[index_Image]);
+        }
+
+        private void 英文ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            中文ToolStripMenuItem.Checked = false;
+            英文ToolStripMenuItem.Checked = true;
+            Language = "English";
+
+            /* 特殊字元先刪除 (因為無法存入INI檔) */
+            if (結束ToolStripMenuItem.Text == "結束(✖)")
+                結束ToolStripMenuItem.Text = 結束ToolStripMenuItem.Text.Substring(0, 2);
+            else if (結束ToolStripMenuItem.Text == "Quit(✖)")
+                結束ToolStripMenuItem.Text = 結束ToolStripMenuItem.Text.Substring(0, 4);
+
+            clsIniFile iniSystem = new clsIniFile(clsData.g_strSystemIniFilePath); // clsData.g_strSystemIniFilePath = Application.StartupPath + "\\INI\\System.ini"
+            ResetLanguage();
+            ChangeLanguage();
+            iniSystem.WriteValue("System", "Language", "English"); // 儲存目前使用之語言種類
+
+            /* 特殊字元補回 (因為無法存入INI檔) */
+            結束ToolStripMenuItem.Text += "(✖)";
+
+            if (path_Images.Count > 0)
+                Update_ImgInfo(path_Images[index_Image]);
+        }
+
+        #endregion
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// 標註顏色批次轉換
+    /// </summary>
+    public class cls_Batch_ChangeColor
+    {
+        public cls_Batch_ChangeColor() { }
+
+        #region 參數
+
+        /// <summary>
+        /// 當前影像之標註檔是否存在
+        /// </summary>
+        public bool B_LabelXML_Exist { get; set; } = false;
+
+        /// <summary>
+        /// 是否已完成判斷 B_LabelXML_Exist
+        /// </summary>
+        public bool B_FinishJudge_LabelXML_Exist { get; set; } = false;
+
+        /// <summary>
+        /// 是否已做【標註顏色轉換】
+        /// </summary>
+        public bool B_Color_Changed { get; set; } = false;
+
+        /// <summary>
+        /// 是否已【儲存】
+        /// </summary>
+        public bool B_Saved { get; set; } = false;
+
+        #endregion
+
+        #region 方法
+
+        /// <summary>
+        /// 此影像是否完成【標註顏色轉換】 或 是否標註檔不存在無需做轉換
+        /// </summary>
+        /// <returns></returns>
+        public bool B_Finished()
+        {
+            if (this.B_FinishJudge_LabelXML_Exist)
+            {
+                if (this.B_LabelXML_Exist == false)
+                    return true;
+                else
+                {
+                    if (this.B_Color_Changed && this.B_Saved)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+            else
+                return false;
+        }
+
+        #endregion
+    }
+}
