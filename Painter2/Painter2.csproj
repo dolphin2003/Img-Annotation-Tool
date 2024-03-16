@@ -103,4 +103,88 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
-      <Auto
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="SaveSetting\SaveSetting_Form.resx">
+      <DependentUpon>SaveSetting_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\picture32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\+.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\-.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Painter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Painter.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CursorLocation.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CursorLocation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CursorLocation2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\-_2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\+_2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FileSize.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ImageSize.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ImageSize_clip.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Pen.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\circle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\circle_fill.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eraser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rectangle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rectangle_fill.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eraser2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\circle.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\er
