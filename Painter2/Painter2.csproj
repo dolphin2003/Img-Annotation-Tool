@@ -187,4 +187,91 @@
     <None Include="Resources\circle.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\er
+    <None Include="Resources\eraser2_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delta.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconfinder_document-save-as_118915.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\next.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\prev.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\next_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\previous_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\重做_24.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\復原_24.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\儲存路徑_32.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ellipse_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ellipse_fill_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\任意範圍選取.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\矩形選取.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\language_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\settings_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\keyboard_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\原圖.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OFF_edited.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ON.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\原圖_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\標註影像_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Painter.ico" />
+    <None Include="Resources\Color_32.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
