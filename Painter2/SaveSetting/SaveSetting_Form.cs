@@ -168,4 +168,69 @@ namespace Painter2.SaveSetting
                     this.cbx_B_ColorList.Checked = saveSetting_.B_ColorList;
                     this.nud_Count_ColorList.Value = saveSetting_.ColorList.Count;
                     // 法1
-                    //var Rbt_C_Pairs = this.List_rbt_ColorList.Zip(saveSetting_.ColorList, (rbt, c
+                    //var Rbt_C_Pairs = this.List_rbt_ColorList.Zip(saveSetting_.ColorList, (rbt, c) => new { Rbt = rbt, C = c });
+                    //foreach (var Rbt_C in Rbt_C_Pairs)
+                    //    Rbt_C.Rbt.BackColor = Rbt_C.C;
+                    // 法2
+                    foreach (var Rbt_C in this.List_rbt_ColorList.Zip(saveSetting_.ColorList, Tuple.Create))
+                        Rbt_C.Item1.BackColor = Rbt_C.Item2;
+
+                    this.cbx_Module.SelectedIndex = saveSetting_.Index_Module;
+
+                    #endregion
+                }
+
+                b_status_ = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            return b_status_;
+        }
+
+        /// <summary>
+        /// 【儲存路徑】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txb_SavePath_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog Dilg = new FolderBrowserDialog();
+            Dilg.SelectedPath = this.txb_SavePath.Text; // 初始路徑
+            if (Dilg.ShowDialog() != DialogResult.OK)
+                return;
+
+            this.txb_SavePath.Text = Dilg.SelectedPath;
+            if (string.IsNullOrEmpty(this.txb_SavePath.Text))
+            {
+                SystemSounds.Exclamation.Play();
+                MessageBox.Show("路徑無效!", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.txb_SavePath.Text = Application.StartupPath;
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 改變ON/OFF狀態
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbx_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox cbx = sender as CheckBox;
+            string Tag = cbx.Tag.ToString();
+            if (cbx.Checked) // ON
+            {
+                cbx.BackgroundImage = Properties.Resources.ON;
+                if (this.Dictionary_Label.ContainsKey(Tag))
+                {
+                    this.Dictionary_Label[Tag].Text = "ON";
+                    this.Dictionary_Label[Tag].ForeColor = Color.DeepSkyBlue;
+                }
+            }
+            else // OFF
+            {
+                cbx.BackgroundImage = Properties.Resources.OFF_edited;
+                if (this.Dictio
