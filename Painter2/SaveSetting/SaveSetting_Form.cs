@@ -123,4 +123,49 @@ namespace Painter2.SaveSetting
                     saveSetting_.B_save_label_Image3 = this.cbx_save_Image3.Checked;
                     saveSetting_.FileName_label_Image3 = this.textBox_FileName_Image3.Text;
 
-                    saveSetting_.B_Load_AllImageFormat = this.cbx_Load_AllI
+                    saveSetting_.B_Load_AllImageFormat = this.cbx_Load_AllImageFormat.Checked;
+                    saveSetting_.ImageFormat_Load = (enu_ImageFormat)(this.cbx_ImageFormat_Load.SelectedIndex);
+
+                    saveSetting_.B_Save_SameImageFormat = this.cbx_Save_SameImageFormat.Checked;
+                    saveSetting_.ImageFormat_Save = (enu_ImageFormat)(this.cbx_ImageFormat_Save.SelectedIndex);
+
+                    saveSetting_.B_ColorList = this.cbx_B_ColorList.Checked;
+                    saveSetting_.ColorList.Clear();
+                    foreach (RadioButton rbt in this.List_rbt_ColorList)
+                        saveSetting_.ColorList.Add(rbt.BackColor);
+
+                    saveSetting_.Index_Module = this.cbx_Module.SelectedIndex;
+
+                    #endregion
+                }
+                else
+                {
+                    #region 將saveSetting_內容傳至UI
+
+                    this.txb_SavePath.Text = saveSetting_.Folder_Save;
+
+                    this.cbx_save_label.Checked = saveSetting_.B_save_label;
+                    this.textBox_FileName_label.Text = saveSetting_.FileName_label;
+
+                    this.cbx_save_OrigImage.Checked = saveSetting_.B_save_OrigImage;
+                    this.textBox_FileName_OrigImage.Text = saveSetting_.FileName_OrigImage;
+
+                    this.cbx_save_Image1.Checked = saveSetting_.B_save_label_Image1;
+                    this.textBox_FileName_Image1.Text = saveSetting_.FileName_label_Image1;
+
+                    this.cbx_save_Image2.Checked = saveSetting_.B_save_label_Image2;
+                    this.textBox_FileName_Image2.Text = saveSetting_.FileName_label_Image2;
+
+                    this.cbx_save_Image3.Checked = saveSetting_.B_save_label_Image3;
+                    this.textBox_FileName_Image3.Text = saveSetting_.FileName_label_Image3;
+
+                    this.cbx_Load_AllImageFormat.Checked = saveSetting_.B_Load_AllImageFormat;
+                    this.cbx_ImageFormat_Load.SelectedIndex = (int)(saveSetting_.ImageFormat_Load);
+
+                    this.cbx_Save_SameImageFormat.Checked = saveSetting_.B_Save_SameImageFormat;
+                    this.cbx_ImageFormat_Save.SelectedIndex = (int)(saveSetting_.ImageFormat_Save);
+
+                    this.cbx_B_ColorList.Checked = saveSetting_.B_ColorList;
+                    this.nud_Count_ColorList.Value = saveSetting_.ColorList.Count;
+                    // 法1
+                    //var Rbt_C_Pairs = this.List_rbt_ColorList.Zip(saveSetting_.ColorList, (rbt, c
