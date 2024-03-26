@@ -63,4 +63,64 @@ namespace Painter2.SaveSetting
 
         private void SaveSetting_Form_Load(object sender, EventArgs e)
         {
-        
+            #region ComboBox 新增項目
+
+            // 新增 cbx_ImageFormat_Load & cbx_ImageFormat_Save 項目
+            this.cbx_ImageFormat_Load.Items.Clear();
+            this.cbx_ImageFormat_Save.Items.Clear();
+            foreach (string item in Enum.GetNames(typeof(enu_ImageFormat)))
+            {
+                this.cbx_ImageFormat_Load.Items.Add(item);
+                this.cbx_ImageFormat_Save.Items.Add(item);
+            }
+
+            // 新增 cbx_Module 項目
+            this.cbx_Module.Items.Clear();
+            foreach (string item in Enum.GetNames(typeof(enu_Module)))
+                this.cbx_Module.Items.Add(item);
+
+            #endregion
+
+            #region 更新GUI參數
+
+            this.ui_parameters(false);
+
+            #endregion
+        }
+
+        /// <summary>
+        /// 將 GUI參數 與 saveSetting參數 互傳
+        /// </summary>
+        /// <param name="ui_2_parameters_">True: UI傳至saveSetting, False: saveSetting傳至UI</param>
+        /// <param name="saveSetting_"></param>
+        /// <returns></returns>
+        public bool ui_parameters(bool ui_2_parameters_, cls_SaveSetting saveSetting_ = null)
+        {
+            bool b_status_ = false;
+            if (saveSetting_ == null)
+                saveSetting_ = this.saveSetting;
+
+            try
+            {
+                if (ui_2_parameters_)
+                {
+                    #region 將UI內容回傳至saveSetting_
+
+                    saveSetting_.Folder_Save = this.txb_SavePath.Text;
+
+                    saveSetting_.B_save_label = this.cbx_save_label.Checked;
+                    saveSetting_.FileName_label = this.textBox_FileName_label.Text;
+
+                    saveSetting_.B_save_OrigImage = this.cbx_save_OrigImage.Checked;
+                    saveSetting_.FileName_OrigImage = this.textBox_FileName_OrigImage.Text;
+
+                    saveSetting_.B_save_label_Image1 = this.cbx_save_Image1.Checked;
+                    saveSetting_.FileName_label_Image1 = this.textBox_FileName_Image1.Text;
+
+                    saveSetting_.B_save_label_Image2 = this.cbx_save_Image2.Checked;
+                    saveSetting_.FileName_label_Image2 = this.textBox_FileName_Image2.Text;
+
+                    saveSetting_.B_save_label_Image3 = this.cbx_save_Image3.Checked;
+                    saveSetting_.FileName_label_Image3 = this.textBox_FileName_Image3.Text;
+
+                    saveSetting_.B_Load_AllImageFormat = this.cbx_Load_AllI
