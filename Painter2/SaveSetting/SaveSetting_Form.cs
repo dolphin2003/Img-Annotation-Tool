@@ -293,4 +293,74 @@ namespace Painter2.SaveSetting
                     rbt.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
                     rbt.Font = new System.Drawing.Font("微軟正黑體", 14.25F);
                     rbt.Location = new System.Drawing.Point(loc_1st.X + dx * x, loc_1st.Y + dy * y);
-                    rbt.Name = "Dynami
+                    rbt.Name = "Dynamic_radioButton_" + index.ToString();
+                    rbt.Size = new System.Drawing.Size(35, 34);
+                    rbt.Text = "   ";
+                    rbt.UseVisualStyleBackColor = false;
+                    rbt.Click += (sender1, ex) => this.Dynamic_radioButton_Click(sender1, ex);
+
+                    this.panel_ColorList.Controls.Add(rbt);
+                    this.List_rbt_ColorList.Add(rbt);
+                }
+            }
+            else
+            {
+                while (count_ColorList != this.List_rbt_ColorList.Count)
+                {
+                    int index = this.List_rbt_ColorList.Count - 1;
+                    this.panel_ColorList.Controls.Remove(this.List_rbt_ColorList[index]);
+                    this.List_rbt_ColorList.RemoveAt(index);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 【顏色快捷列表】 Click事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Dynamic_radioButton_Click(object sender, EventArgs e)
+        {
+            RadioButton rbt = sender as RadioButton;
+            ColorDialog colorDialog_SetColor = new ColorDialog();
+            colorDialog_SetColor.Color = rbt.BackColor;
+            if (colorDialog_SetColor.ShowDialog() != DialogResult.Cancel)
+                rbt.BackColor = colorDialog_SetColor.Color;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 【載入預設值】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_LoadDefaultValues_Click(object sender, EventArgs e)
+        {
+            cls_SaveSetting saveSetting_ = new cls_SaveSetting();
+            this.ui_parameters(false, saveSetting_);
+        }
+
+        /// <summary>
+        /// 【關閉】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_Close_Click(object sender, EventArgs e)
+        {
+            //this.Close();
+            DialogResult = DialogResult.Cancel; // 會自動關閉表單
+        }
+
+        /// <summary>
+        /// 【儲存】
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_Save_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("確認是否【儲存】?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dr != DialogResult.Yes)
+                return;
+
+ 
