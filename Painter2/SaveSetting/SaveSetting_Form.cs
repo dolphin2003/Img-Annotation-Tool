@@ -363,4 +363,52 @@ namespace Painter2.SaveSetting
             if (dr != DialogResult.Yes)
                 return;
 
- 
+            if (!(this.ui_parameters(true)))
+            {
+                MessageBox.Show("【儲存】失敗!", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            bool b_status_ = this.saveSetting.Save();
+            
+            if (b_status_)
+            {
+                MessageBox.Show("【儲存】成功", "提示訊息", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult = DialogResult.Yes; // 會自動關閉表單
+            }
+            else
+                MessageBox.Show("【儲存】失敗!", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        #region 讓使用者可移動視窗
+
+        int curr_x, curr_y;
+        bool isWndMove;
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                this.curr_x = e.X;
+                this.curr_y = e.Y;
+                this.isWndMove = true;
+            }
+        }
+
+        private void panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.isWndMove)
+            {
+                //this.Location = new Point(this.Left + e.X - this.curr_x, this.Top + e.Y - this.curr_y);
+                this.Location = new Point(Control.MousePosition.X - e.X + (e.X - this.curr_x), Control.MousePosition.Y - e.Y + (e.Y - this.curr_y));
+            }
+        }
+        
+        private void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.isWndMove = false;
+        }
+
+        #endregion
+    }
+}
